@@ -5,10 +5,11 @@ import selection from "d3-selection-multi";
 
 const library = new Library();
 
-let tickDuration = 250;
+// let tickDuration = 250;
+let tickDuration = 1350;
 let top_n = 10;
-let startYear = 1500;
-let endYear = 2018;
+let startYear = 1979;
+let endYear = 2017;
 let height = 600;
 let width = 975;
 let dataset;
@@ -51,20 +52,18 @@ let halo = function(text, strokeWidth, color='#ffffff') {
 };
 
 
-fetch('./dataset.csv')
+fetch('./data.csv')
     .then((res) => res.text())
     .then((res) => {
         dataset = d3.csvParse(res);
         document.body.appendChild(chart());
     });
 
-
-
-
 let chart = function () {
     const svg = d3.select(library.DOM.svg(width, height));
     const margin = {
-        top: 80,
+        // top: 80,
+        top: 120,
         right: 0,
         bottom: 5,
         left: 0
@@ -77,18 +76,87 @@ let chart = function () {
             class: 'title',
             y: 24
         })
-        .html('The most populous cities in the world from 1500 to 2018');
+        .html('31省市1979年到2017年铁路运营里程排名变化 TOP10');
 
-    haloHighlight(title, 250, 2, 1, '#000000');
+    //haloHighlight(title, 250, 2, 1, '#000000');
 
-    let subTitle = svg.append('text')
+    // let subTitle = svg.append('text')
+    //     .attrs({
+    //         class: 'subTitle',
+    //         y: 55
+    //     })
+    //     .html('Population (thousands)');
+
+    svg.append('text')
         .attrs({
             class: 'subTitle',
             y: 55
         })
-        .html('Population (thousands)');
+        .html('单位：公里');
 
-    haloHighlight(subTitle, 1750, 1, 1, '#777777');
+    let colourScale = d3.scaleOrdinal()
+    // .range(["#adb0ff", "#ffb3ff", "#90d595", "#e48381", "#aafbff", "#f7bb5f", "#eafb50"])
+        .range(["#adb0ff", "#ffb3ff", "#90d595", "#e48381", "#aafbff", "#f7bb5f"])
+        // .domain(["India","Europe","Asia","Latin America","Middle East","North America","Africa"]);
+        .domain(["north","northeastern","east","CentralAndSouthern","southwest","northwestern"]);
+
+    let legend = svg
+        .selectAll(".legend")
+        .data(["north","northeastern","east","CentralAndSouthern","southwest","northwestern"])
+        .enter()
+        .append("g")
+        .attr("class", "legend")
+        .attr("transform", "translate(" + 10  + "," + 80 + ")");
+
+    legend
+        .append("circle")
+        .attr("cx", function(d,i){return i*5*15;})
+        .attr("cy", 0)
+        .attr("r", 10)
+        .attr("width", 10)
+        .attr("height", 10)
+        .data(["#adb0ff", "#ffb3ff", "#90d595", "#e48381", "#aafbff", "#f7bb5f"])
+        .style("fill", function(d) {
+            return d;
+        });
+
+    legend
+        .append("text")
+        .attr("x", function(d,i){return i*5*15 + 15;})
+        .attr("text-anchor",'start')
+        .attr("y", 6)
+        .style("font-size", 5*3 + "px")
+        .data(["华北", "东北", "华东", "中南", "西南", "西北"])
+        .text(function(d){return d});
+
+
+    // let legend = svg.append("g")
+    //     .attr("class", "legend");
+    //
+    // legend.selectAll('text')
+    //     .data(["#3498db","#e74c3c","#2ecc71"])
+    //     .enter()
+    //     .append("rect")
+    //     .attr("x", function(d, i){ return i *  20;})
+    //     .attr("y", 90)
+    //     .attr("width", 10)
+    //     .attr("height", 10)
+    //     .style("fill", function(d) {
+    //         return d;
+    //     });
+    //
+    //
+    // legend.selectAll('text')
+    //     .data(["New York","Mumbai","Bengaluru"])
+    //     .enter()
+    //     .append("text")
+    //     .attr("x", function(d, i){ return i *  20 + 9 + 25})
+    //     .attr("y", 90)
+    //     .text(function(d){return d});
+
+
+
+    // haloHighlight(subTitle, 1750, 1, 1, '#777777');
 
     let year = startYear;
 
@@ -118,9 +186,8 @@ let chart = function () {
     let groups = dataset.map(d => d.group);
     groups = [...new Set(groups)];
 
-    let colourScale = d3.scaleOrdinal()
-        .range(["#adb0ff", "#ffb3ff", "#90d595", "#e48381", "#aafbff", "#f7bb5f", "#eafb50"])
-        .domain(["India","Europe","Asia","Latin America","Middle East","North America","Africa"]);
+
+
     // .domain(groups);
 
     let xAxis = d3.axisTop()
@@ -164,11 +231,18 @@ let chart = function () {
             'text-anchor': 'end'
         })
         .selectAll('tspan')
-        .data(d => [{text: d.name, opacity: 1, weight:600}, {text: d.subGroup, opacity: 1, weight:400}])
+        // .data(d => [{text: d.name, opacity: 1, weight:600}, {text: d.subGroup, opacity: 1, weight:400}])
+
+        .data(d => [{text: d.name, opacity: 1, weight:600}])
         .enter()
         .append('tspan')
+        // .attrs({
+        //     x: 0,
+        //     dy: (d,i) => i*16
+        // })
         .attrs({
             x: 0,
+            y: 8,
             dy: (d,i) => i*16
         })
         .styles({
@@ -202,35 +276,35 @@ let chart = function () {
     //     .html('Graphic: @jburnmurdoch')
     //     .call(halo, 10);
 
-    // let sources = svg.append('text')
-    //     .attrs({
-    //         class: 'caption',
-    //         x: width,
-    //         y: height-6
-    //     })
-    //     .styles({
-    //         'text-anchor': 'end'
-    //     })
-    //     .html('Sources: Reba, M. L., F. Reitsma, and K. C. Seto. 2018; Demographia')
-    //     .call(halo, 10);
-
-    let yearIntro = svg.append('text')
+    let sources = svg.append('text')
         .attrs({
-            class: 'yearIntro',
-            x: width-225,
-            y: height-45
+            class: 'caption',
+            x: width,
+            y: height-6
         })
         .styles({
             'text-anchor': 'end'
         })
-        .html('Year: ');
+        .html('数据来源: 各地统计部门')
+        .call(halo, 10);
 
-haloHighlight(yearIntro, 3000, 3, 1, '#cccccc');
+    // let yearIntro = svg.append('text')
+    //     .attrs({
+    //         class: 'yearIntro',
+    //         x: width-235,
+    //         y: height-45
+    //     })
+    //     .styles({
+    //         'text-anchor': 'end'
+    //     })
+    //     .html('年: ');
+
+// haloHighlight(yearIntro, 3000, 3, 1, '#cccccc');
 
 let yearText = svg.append('text')
     .attrs({
         class: 'yearText',
-        x: width-225,
+        x: width-235,
         y: height-45
     })
     // .styles({
@@ -331,13 +405,19 @@ d3.timeout(_ => {
 
         let tspans = labels
             .selectAll('tspan')
-            .data(d => [{text: d.name, opacity: 1, weight:600}, {text: d.subGroup, opacity: 1, weight:400}]);
+            // .data(d => [{text: d.name, opacity: 1, weight:600}, {text: d.subGroup, opacity: 1, weight:400}]);
+            .data(d => [{text: d.name, opacity: 1, weight:600}]);
 
         tspans.enter()
             .append('tspan')
             .html(d => d.text)
+            // .attrs({
+            //     x: 0,
+            //     dy: (d,i) => i*16
+            // })
             .attrs({
                 x: 0,
+                y: 8,
                 dy: (d,i) => i*16
             })
             .styles({
@@ -431,7 +511,7 @@ d3.timeout(_ => {
         year = year + 1;
     },tickDuration);
 
-}, 6000);
+}, 2500);
 
     return svg.node();
 };
