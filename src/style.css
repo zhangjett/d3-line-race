@@ -1,50 +1,53 @@
-text{
-    font-size: 16px;
-    font-family: Open Sans, sans-serif;
+body {
+    font-size: 12px;
+    font-family: 'Abel', sans-serif;
+    margin-top: 20px;
 }
-text.title{
-    font-size: 28px;
-    font-weight: 600;
+
+li{
+    margin-left: 0px;
 }
-text.subTitle{
-    font-weight: 500;
-    fill: #777777;
+
+.x.axis path,.x.axis line {
+    fill: none;
+    stroke: none;
 }
-text.label{
-    font-size: 18px;
+
+.y.axis path {
+    fill: none;
 }
-.map-legend text{
-    font-size: 14px;
-    fill: #777777;
+
+.y.axis line {
+    fill: none;
+    stroke: #eeeeee;
+    shape-rendering: crispEdges;
 }
-text.caption{
-    font-weight: 400;
-    font-size: 14px;
-    fill: #999999;
+
+.x.axis text, .y.axis text{
+    font-size: 10px;
+    fill:grey;
 }
-text.yearText{
-    font-size: 96px;
-    font-weight: 700;
-    fill: #cccccc;
+
+.line {
+    fill: none;
+    stroke-width: 2px;
 }
-text.yearIntro{
-    font-size: 48px;
-    font-weight: 700;
-    fill: #cccccc;
+
+.tick line{
+    stroke: #e0e1e1;
+    opacity: 1;
 }
-.tick text {
-    fill: #777777;
+
+#title, .explain{
+    text-indent: 15px;
 }
-.xAxis .tick:nth-child(2) text {
-    text-anchor: start;
+
+#credit{
+    color:grey;
+    text-indent: 20px;
+    line-height: 30px;
 }
-.tick line {
-    shape-rendering: CrispEdges;
-    stroke: #dddddd;
-}
-.tick line.origin{
-    stroke: #aaaaaa;
-}
-path.domain{
-    display: none;
+
+a:hover{
+    cursor:pointer;
 }
